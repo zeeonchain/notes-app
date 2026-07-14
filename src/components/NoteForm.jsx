@@ -17,14 +17,14 @@ export default function NoteForm({ initialNote, onSave, onCancel, saving }) {
 
   return (
     <div className="fixed inset-0 z-20 flex items-start justify-center overflow-y-auto bg-ink/40 px-4 py-10 backdrop-blur-[2px]">
-      <div className="w-full max-w-lg rounded-2xl border border-paper-rule bg-paper-card p-7 shadow-xl">
-        <h2 className="font-display text-xl font-semibold text-ink">
+      <div className="w-full max-w-lg rounded-2xl border border-paper-rule bg-paper-card p-7 shadow-xl dark:border-night-rule dark:bg-night-card">
+        <h2 className="font-display text-xl font-semibold text-ink dark:text-ink-invert">
           {initialNote ? 'Edit note' : 'New note'}
         </h2>
 
         <form onSubmit={handleSubmit} className="mt-5 flex flex-col gap-4">
           <div>
-            <label htmlFor="note-title" className="mb-1.5 block text-xs font-medium text-ink-muted">
+            <label htmlFor="note-title" className="mb-1.5 block text-xs font-medium text-ink-muted dark:text-ink-mutedInvert">
               Title
             </label>
             <input
@@ -34,13 +34,13 @@ export default function NoteForm({ initialNote, onSave, onCancel, saving }) {
               autoFocus
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="w-full rounded-xl border border-paper-rule bg-paper-bg px-3.5 py-2.5 text-sm text-ink outline-none transition-colors focus:border-pen focus:ring-2 focus:ring-pen/15"
+              className="w-full rounded-xl border border-paper-rule bg-paper-bg px-3.5 py-2.5 text-sm text-ink outline-none transition-colors focus:border-pen focus:ring-2 focus:ring-pen/15 dark:border-night-rule dark:bg-night-bg dark:text-ink-invert"
               placeholder="Give it a title"
             />
           </div>
 
           <div>
-            <label htmlFor="note-body" className="mb-1.5 block text-xs font-medium text-ink-muted">
+            <label htmlFor="note-body" className="mb-1.5 block text-xs font-medium text-ink-muted dark:text-ink-mutedInvert">
               Note
             </label>
             <textarea
@@ -48,7 +48,7 @@ export default function NoteForm({ initialNote, onSave, onCancel, saving }) {
               rows={6}
               value={body}
               onChange={(e) => setBody(e.target.value)}
-              className="w-full resize-none rounded-xl border border-paper-rule bg-paper-bg px-3.5 py-2.5 text-sm text-ink outline-none transition-colors focus:border-pen focus:ring-2 focus:ring-pen/15"
+              className="w-full resize-none rounded-xl border border-paper-rule bg-paper-bg px-3.5 py-2.5 text-sm text-ink outline-none transition-colors focus:border-pen focus:ring-2 focus:ring-pen/15 dark:border-night-rule dark:bg-night-bg dark:text-ink-invert"
               placeholder="Write something…"
             />
           </div>
@@ -57,7 +57,7 @@ export default function NoteForm({ initialNote, onSave, onCancel, saving }) {
             <button
               type="button"
               onClick={onCancel}
-              className="rounded-xl px-4 py-2.5 text-sm font-medium text-ink-muted hover:text-ink"
+              className="rounded-xl px-4 py-2.5 text-sm font-medium text-ink-muted hover:text-ink dark:text-ink-mutedInvert dark:hover:text-ink-invert"
             >
               Cancel
             </button>

@@ -1,7 +1,9 @@
 import { useState } from 'react'
 import { supabase } from '../lib/supabase'
+import { playClick } from '../lib/preferences'
+import SettingsToggles from './SettingsToggles'
 
-export default function Auth() {
+export default function Auth({ themeProps }) {
   const [mode, setMode] = useState('signin') // 'signin' | 'signup'
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -11,6 +13,7 @@ export default function Auth() {
 
   async function handleSubmit(e) {
     e.preventDefault()
+    playClick()
     setError('')
     setMessage('')
     setLoading(true)
@@ -32,16 +35,20 @@ export default function Auth() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-paper-bg px-4 font-body">
-      <div className="w-full max-w-sm rounded-2xl border border-paper-rule bg-paper-card p-10 shadow-xl shadow-ink/5">
+    <div className="flex min-h-screen items-center justify-center bg-paper-bg px-4 font-body dark:bg-night-bg">
+      <div className="absolute right-4 top-4">
+        <SettingsToggles {...themeProps} />
+      </div>
+
+      <div className="w-full max-w-sm rounded-2xl border border-paper-rule bg-paper-card p-10 shadow-xl shadow-ink/5 dark:border-night-rule dark:bg-night-card dark:shadow-none">
         <div className="mb-6 flex h-11 w-11 items-center justify-center rounded-xl bg-pen font-display text-lg font-semibold text-white">
           N
         </div>
 
-        <h1 className="font-display text-[1.7rem] font-semibold leading-tight text-ink">
+        <h1 className="font-display text-[1.7rem] font-semibold leading-tight text-ink dark:text-ink-invert">
           {mode === 'signin' ? 'Welcome back' : 'Create an account'}
         </h1>
-        <p className="mt-2 text-[15px] text-ink-muted">
+        <p className="mt-2 text-[15px] text-ink-muted dark:text-ink-mutedInvert">
           {mode === 'signin'
             ? 'Sign in to see your notes.'
             : 'Sign up with an email and password.'}
@@ -49,7 +56,7 @@ export default function Auth() {
 
         <form onSubmit={handleSubmit} className="mt-8 flex flex-col gap-5">
           <div>
-            <label htmlFor="email" className="mb-1.5 block text-xs font-medium text-ink-muted">
+            <label htmlFor="email" className="mb-1.5 block text-xs font-medium text-ink-muted dark:text-ink-mutedInvert">
               Email
             </label>
             <input
@@ -59,13 +66,13 @@ export default function Auth() {
               autoComplete="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full rounded-xl border border-paper-rule bg-paper-bg px-3.5 py-2.5 text-sm text-ink outline-none transition-colors focus:border-pen focus:ring-2 focus:ring-pen/15"
+              className="w-full rounded-xl border border-paper-rule bg-paper-bg px-3.5 py-2.5 text-sm text-ink outline-none transition-colors focus:border-pen focus:ring-2 focus:ring-pen/15 dark:border-night-rule dark:bg-night-bg dark:text-ink-invert"
               placeholder="you@example.com"
             />
           </div>
 
           <div>
-            <label htmlFor="password" className="mb-1.5 block text-xs font-medium text-ink-muted">
+            <label htmlFor="password" className="mb-1.5 block text-xs font-medium text-ink-muted dark:text-ink-mutedInvert">
               Password
             </label>
             <input
@@ -76,7 +83,7 @@ export default function Auth() {
               autoComplete={mode === 'signin' ? 'current-password' : 'new-password'}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full rounded-xl border border-paper-rule bg-paper-bg px-3.5 py-2.5 text-sm text-ink outline-none transition-colors focus:border-pen focus:ring-2 focus:ring-pen/15"
+              className="w-full rounded-xl border border-paper-rule bg-paper-bg px-3.5 py-2.5 text-sm text-ink outline-none transition-colors focus:border-pen focus:ring-2 focus:ring-pen/15 dark:border-night-rule dark:bg-night-bg dark:text-ink-invert"
               placeholder="At least 6 characters"
             />
           </div>
@@ -100,11 +107,12 @@ export default function Auth() {
         <button
           type="button"
           onClick={() => {
+            playClick()
             setMode(mode === 'signin' ? 'signup' : 'signin')
             setError('')
             setMessage('')
           }}
-          className="mt-6 w-full text-center text-sm text-ink-muted hover:text-pen"
+          className="mt-6 w-full text-center text-sm text-ink-muted hover:text-pen dark:text-ink-mutedInvert"
         >
           {mode === 'signin'
             ? "Don't have an account? "

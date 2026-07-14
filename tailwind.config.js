@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 export default {
+  darkMode: 'class',
   content: ['./index.html', './src/**/*.{js,jsx}'],
   theme: {
     extend: {
@@ -10,9 +11,16 @@ export default {
           rule: '#E7E8EC',
           ruleFaint: '#F1F2F5',
         },
+        night: {
+          bg: '#0E0F13',
+          card: '#17191F',
+          rule: '#282B34',
+        },
         ink: {
           DEFAULT: '#14161F',
           muted: '#767C8C',
+          invert: '#F3F4F6',
+          mutedInvert: '#9AA0AE',
         },
         pen: {
           DEFAULT: '#4F46E5',

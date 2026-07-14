@@ -2,8 +2,10 @@ import { useEffect, useState } from 'react'
 import { supabase } from '../lib/supabase'
 import NoteCard from './NoteCard'
 import NoteForm from './NoteForm'
+import SettingsToggles from './SettingsToggles'
+import { playClick } from '../lib/preferences'
 
-export default function NotesApp({ session }) {
+export default function NotesApp({ session, themeProps }) {
   const [notes, setNotes] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
@@ -39,16 +41,19 @@ export default function NotesApp({ session }) {
   }
 
   function openNewNote() {
+    playClick()
     setEditingNote(null)
     setFormOpen(true)
   }
 
   function openEditNote(note) {
+    playClick()
     setEditingNote(note)
     setFormOpen(true)
   }
 
   async function handleSave({ title, body }) {
+    playClick()
     setSaving(true)
     setError('')
 
@@ -77,6 +82,7 @@ export default function NotesApp({ session }) {
     const confirmed = window.confirm(`Delete "${note.title}"? This can't be undone.`)
     if (!confirmed) return
 
+    playClick()
     const { error } = await supabase.from('notes').delete().eq('id', note.id)
     if (error) {
       setError(error.message)
@@ -86,11 +92,12 @@ export default function NotesApp({ session }) {
   }
 
   async function handleSignOut() {
+    playClick()
     await supabase.auth.signOut()
   }
 
   return (
-    <div className="min-h-screen bg-paper-bg px-4 py-10 font-body sm:px-8">
+    <div className="min-h-screen bg-paper-bg px-4 py-10 font-body dark:bg-night-bg sm:px-8">
       <div className="mx-auto max-w-3xl">
         <header className="mb-10 flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -98,23 +105,26 @@ export default function NotesApp({ session }) {
               N
             </div>
             <div>
-              <h1 className="font-display text-xl font-semibold leading-tight text-ink">Notes</h1>
-              <p className="text-xs text-ink-muted">{user.email}</p>
+              <h1 className="font-display text-xl font-semibold leading-tight text-ink dark:text-ink-invert">Notes</h1>
+              <p className="text-xs text-ink-muted dark:text-ink-mutedInvert">{user.email}</p>
             </div>
           </div>
-          <button
-            onClick={handleSignOut}
-            className="rounded-xl border border-paper-rule px-3.5 py-2 text-sm font-medium text-ink-muted transition-colors hover:border-marker/40 hover:text-marker"
-          >
-            Sign out
-          </button>
+          <div className="flex items-center gap-2">
+            <SettingsToggles {...themeProps} />
+            <button
+              onClick={handleSignOut}
+              className="rounded-xl border border-paper-rule px-3.5 py-2 text-sm font-medium text-ink-muted transition-colors hover:border-marker/40 hover:text-marker dark:border-night-rule dark:text-ink-mutedInvert"
+            >
+              Sign out
+            </button>
+          </div>
         </header>
 
         <div className="mb-4 flex flex-col gap-3 sm:flex-row">
           <div className="relative flex-1">
             <svg
               viewBox="0 0 24 24"
-              className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-muted"
+              className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-muted dark:text-ink-mutedInvert"
               fill="none"
               stroke="currentColor"
               strokeWidth="2"
@@ -127,7 +137,7 @@ export default function NotesApp({ session }) {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search notes by title…"
-              className="w-full rounded-xl border border-paper-rule bg-paper-card py-2.5 pl-10 pr-3.5 text-sm text-ink outline-none transition-colors focus:border-pen focus:ring-2 focus:ring-pen/15"
+              className="w-full rounded-xl border border-paper-rule bg-paper-card py-2.5 pl-10 pr-3.5 text-sm text-ink outline-none transition-colors focus:border-pen focus:ring-2 focus:ring-pen/15 dark:border-night-rule dark:bg-night-card dark:text-ink-invert"
             />
           </div>
           <button
@@ -143,18 +153,18 @@ export default function NotesApp({ session }) {
         )}
 
         {loading ? (
-          <p className="mt-6 text-sm text-ink-muted">Loading your notes…</p>
+          <p className="mt-6 text-sm text-ink-muted dark:text-ink-mutedInvert">Loading your notes…</p>
         ) : notes.length === 0 ? (
-          <div className="mt-2 rounded-2xl border border-paper-rule bg-paper-card px-6 py-16 text-center">
-            <p className="font-display text-lg font-semibold text-ink">No notes yet</p>
-            <p className="mt-1.5 text-sm text-ink-muted">
+          <div className="mt-2 rounded-2xl border border-paper-rule bg-paper-card px-6 py-16 text-center dark:border-night-rule dark:bg-night-card">
+            <p className="font-display text-lg font-semibold text-ink dark:text-ink-invert">No notes yet</p>
+            <p className="mt-1.5 text-sm text-ink-muted dark:text-ink-mutedInvert">
               Click "New note" above to write your first one.
             </p>
           </div>
         ) : filteredNotes.length === 0 ? (
-          <div className="mt-2 rounded-2xl border border-paper-rule bg-paper-card px-6 py-16 text-center">
-            <p className="font-display text-lg font-semibold text-ink">No matches</p>
-            <p className="mt-1.5 text-sm text-ink-muted">
+          <div className="mt-2 rounded-2xl border border-paper-rule bg-paper-card px-6 py-16 text-center dark:border-night-rule dark:bg-night-card">
+            <p className="font-display text-lg font-semibold text-ink dark:text-ink-invert">No matches</p>
+            <p className="mt-1.5 text-sm text-ink-muted dark:text-ink-mutedInvert">
               No note titles match "{search}".
             </p>
           </div>
@@ -178,6 +188,7 @@ export default function NotesApp({ session }) {
           saving={saving}
           onSave={handleSave}
           onCancel={() => {
+            playClick()
             setFormOpen(false)
             setEditingNote(null)
           }}
